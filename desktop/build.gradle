@@ -1,0 +1,103 @@
+apply plugin: "java"
+
+sourceCompatibility = 1.8
+sourceSets.main.java.srcDirs = [ "src/" ]
+
+project.ext.mainClassName = "io.anuke.procgdx.desktop.DesktopLauncher"
+project.ext.assetsDir = new File("../core/assets");
+
+def PACKR_DIR = "$System.env.PACKR_DIR"
+
+task run(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+}
+
+task debug(dependsOn: classes, type: JavaExec) {
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+    debug = true
+}
+
+task dist(type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.resourcesDir)
+    from {configurations.compile.collect {zipTree(it)}}
+    from files(project.assetsDir);
+ 
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+}
+
+dist.dependsOn classes
+
+task clearOut(type: Delete){
+	delete "packr-out/"
+}
+
+ext.getPlatform = {
+	if(project.gradle.startParameter.taskNames.size() == 0 || !project.gradle.startParameter.taskNames.first().contains("packr")) return;
+
+	if (project.hasProperty("platform")) {
+		def lc = platform.toLowerCase()
+		if(lc.equals("windows")){
+			return "windows64";
+		}else if(lc.equals("linux")){
+			return "linux64";
+		}else if(lc.equals("mac")){
+			return "mac";
+		}else{
+			throw new InvalidUserDataException("Invalid platform. Set platform with -Pplatform=windows/linux/mac");
+		}
+	}else{
+		throw new InvalidUserDataException("No platform defined. Set platform with -Pplatform=windows/linux/mac");
+	}
+}
+
+//note: call desktop:dist beforehand
+task packrCmd(type: Exec) {
+
+	copy{
+		into PACKR_DIR
+		from "build/libs/desktop-1.0.jar"
+	}
+
+	commandLine "java", "-jar", PACKR_DIR+"packr.jar", "--verbose", /*"--resources", project.ext.assetsDir,*/ "--platform", getPlatform(), "--executable", appName, "--output", "packr-out/", "--mainclass", project.ext.mainClassName, "--jdk", PACKR_DIR+"jdk-"+getPlatform()+".zip", "--classpath", 
+		"--", PACKR_DIR+"config.json"
+	
+}
+
+task packrZip(type: Zip) {
+	dependsOn "packrCmd"
+	finalizedBy "clearOut"
+	
+    from "packr-out/"
+    archiveName appName + "-" + getPlatform() + ".zip"
+    destinationDir(file("packr-export"))
+}
+
+eclipse {
+    project {
+        name = appName + "-desktop"
+        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/core/assets'
+    }
+}
+
+
+task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
+  doLast {
+    def classpath = new XmlParser().parse(file(".classpath"))
+    new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);
+    def writer = new FileWriter(file(".classpath"))
+    def printer = new XmlNodePrinter(new PrintWriter(writer))
+    printer.setPreserveWhitespace(true)
+    printer.print(classpath)
+  }
+}
