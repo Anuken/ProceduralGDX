@@ -42,14 +42,14 @@ public class PlanetShader implements Shader {
     	program.setUniformMatrix("u_projViewTrans", camera.combined);
     	
     	context.setDepthTest(GL20.GL_LEQUAL);
-       // context.setCullFace(GL20.GL_BACK);
+        context.setCullFace(GL20.GL_BACK);
+        context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
     
     @Override
     public void render (Renderable renderable) {  
     	program.setUniformMatrix("u_worldTrans", renderable.worldTransform);
     	program.setUniformf("u_center", renderable.meshPart.center);
-    	//program.setUniformf("u_radius", renderable.meshPart.center);
     	program.setUniformf("u_time", 0f);
     	renderable.meshPart.render(program);
     }

@@ -17,11 +17,10 @@ import io.anuke.ucore.scene.ui.layout.Table;
 public class PlanetGenerator implements Generator{
 	PerspectiveCamera cam;
 	CameraInputController camController;
-	Shader shader;
-	Model model;
+	Shader planetShader, cloudShader;
 	RenderContext renderContext;
 	Environment environment;
-	Renderable renderable;
+	Renderable planet, clouds;
 
 	public PlanetGenerator(){
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -35,32 +34,52 @@ public class PlanetGenerator implements Generator{
 		Inputs.addProcessor(camController);
 
 		ModelBuilder modelBuilder = new ModelBuilder();
-		model = modelBuilder.createSphere(2f, 2f, 2f, 100, 100, new Material(), Usage.Position | Usage.Normal | Usage.TextureCoordinates);
+		
+		float planetSize = 2f, cloudSize = 3.2f;
+		int divis = 100;
+		
+		planet = genRenderable(modelBuilder.createSphere(planetSize, planetSize, planetSize, divis, divis, new Material(), 
+						Usage.Position | Usage.Normal | Usage.TextureCoordinates
+						));
+		
+		clouds = genRenderable(modelBuilder.createSphere(cloudSize, cloudSize, cloudSize, divis, divis, new Material(), 
+					Usage.Position | Usage.Normal | Usage.TextureCoordinates
+				));
 
+		renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
+		
+	    planetShader = new PlanetShader("planet");
+		planetShader.init();
+		
+		cloudShader = new CloudShader("cloud");
+		cloudShader.init();
+	}
+	
+	Renderable genRenderable(Model model){
 		NodePart blockPart = model.nodes.get(0).parts.get(0);
 
-		renderable = new Renderable();
+		Renderable renderable = new Renderable();
 		blockPart.setRenderable(renderable);
 		renderable.environment = null;
 		renderable.worldTransform.idt();
-		//renderable.meshPart.primitiveType = GL20.GL_LINES;
 		renderable.meshPart.update();
-
-		renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
-	    shader = new PlanetShader("planet");
-		shader.init();
+		return renderable;
 	}
 
 	public void update(){
 		camController.update();
-
-		//Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 
 		renderContext.begin();
-		shader.begin(cam, renderContext);
-		shader.render(renderable);
-		shader.end();
+		
+		planetShader.begin(cam, renderContext);
+		planetShader.render(planet);
+		planetShader.end();
+		
+		cloudShader.begin(cam, renderContext);
+		cloudShader.render(clouds);
+		cloudShader.end();
+		
 		renderContext.end();
 		    
 		
