@@ -130,12 +130,12 @@ void main() {
     vec4 pos = u_projViewTrans * u_worldTrans * vec4(a_position, 1.0);
     
     float scl = 1.0;
-    float mag = 0.5;
+    float mag = 0.6;
     float tscl = 99.0;
     float dst = 1.0 + ((snoise(vec4(a_position.xyz / scl, u_time / tscl)) + 1.0) / 2.0) * mag
                     + ((snoise(vec4(a_position.xyz / scl * 2.0, u_time / tscl)) + 1.0) / 2.0) * mag/2.0
                     + ((snoise(vec4(a_position.xyz / scl * 4.0, u_time / tscl)) + 1.0) / 2.0) * mag/4.0;
-    v_height = (dst - 1.1) / 1.5;
+    v_height = (dst - 1.2) / 1.2;
     v_mag = mag;
     
     vec3 rel = (-vec3(pos) + ((pos - u_center) * dst + u_center));

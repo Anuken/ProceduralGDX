@@ -41,7 +41,7 @@ public class PlanetShader implements Shader {
     	program.begin();
     	program.setUniformMatrix("u_projViewTrans", camera.combined);
     	
-    	context.setDepthTest(GL20.GL_LEQUAL);
+    	context.setDepthTest(GL20.GL_LESS);
         context.setCullFace(GL20.GL_BACK);
         context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }

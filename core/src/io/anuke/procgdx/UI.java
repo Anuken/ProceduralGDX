@@ -3,8 +3,10 @@ package io.anuke.procgdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 
+import io.anuke.gif.GifRecorder;
 import io.anuke.procgdx.generators.*;
 import io.anuke.procgdx.generators.planets.PlanetGenerator;
 import io.anuke.ucore.core.Graphics;
@@ -20,6 +22,7 @@ public class UI extends SceneModule{
 	Generator[] generators = {new PlanetGenerator(), new Terrain(), new VoxelClouds(), new VoxelTerrain(), new HeightmapTerrain(), new RGBNoise()};
 	Generator current = generators[0];
 	Table genTable;
+	GifRecorder recorder = new GifRecorder(new SpriteBatch());
 	
 	@Override
 	public void init(){
@@ -73,6 +76,8 @@ public class UI extends SceneModule{
 	public void update(){
 		Graphics.clear(Color.BLACK);
 		super.update();
+		
+		recorder.update();
 		
 		if(Inputs.keyUp(Keys.ESCAPE)){
 			Gdx.app.exit();

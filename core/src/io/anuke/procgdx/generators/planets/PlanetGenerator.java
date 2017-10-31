@@ -35,7 +35,7 @@ public class PlanetGenerator implements Generator{
 
 		ModelBuilder modelBuilder = new ModelBuilder();
 		
-		float planetSize = 2f, cloudSize = 3.2f;
+		float planetSize = 2f, cloudSize = 3.3f;
 		int divis = 100;
 		
 		planet = genRenderable(modelBuilder.createSphere(planetSize, planetSize, planetSize, divis, divis, new Material(), 
