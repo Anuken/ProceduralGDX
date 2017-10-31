@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 import io.anuke.procgdx.generators.*;
+import io.anuke.procgdx.generators.planets.PlanetGenerator;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.modules.SceneModule;
@@ -16,7 +17,7 @@ import io.anuke.ucore.scene.ui.TextButton;
 import io.anuke.ucore.scene.ui.layout.Table;
 
 public class UI extends SceneModule{
-	Generator[] generators = {new Terrain(), new VoxelClouds(), new VoxelTerrain(), new HeightmapTerrain(), new RGBNoise()};
+	Generator[] generators = {new PlanetGenerator(), new Terrain(), new VoxelClouds(), new VoxelTerrain(), new HeightmapTerrain(), new RGBNoise()};
 	Generator current = generators[0];
 	Table genTable;
 	
@@ -78,6 +79,12 @@ public class UI extends SceneModule{
 		}
 		
 		Inputs.update();
+	}
+	
+	@Override
+	public void resize(int width, int height){
+		super.resize(width, height);
+		current.resize(width, height);
 	}
 	
 }

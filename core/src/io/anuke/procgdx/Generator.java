@@ -6,4 +6,5 @@ public interface Generator{
 	
 	public void build(Table table);
 	public void dispose(Table table);
+	public default void resize(int width, int height){}
 }
