@@ -27,7 +27,7 @@ public class PlanetGenerator implements Generator{
 		cam.position.set(2f, 2f, 2f);
 		cam.lookAt(0, 0, 0);
 		cam.near = 1f;
-		cam.far = 1000f;
+		cam.far = 100f;
 		cam.update();
 
 		camController = new CameraInputController(cam);
@@ -38,13 +38,11 @@ public class PlanetGenerator implements Generator{
 		float planetSize = 2f, cloudSize = 3.3f;
 		int divis = 100;
 		
-		planet = genRenderable(modelBuilder.createSphere(planetSize, planetSize, planetSize, divis, divis, new Material(), 
-						Usage.Position | Usage.Normal | Usage.TextureCoordinates
-						));
+		planet = genRenderable(modelBuilder.createSphere(planetSize, planetSize, planetSize, 
+				divis, divis, new Material(), Usage.Position));
 		
-		clouds = genRenderable(modelBuilder.createSphere(cloudSize, cloudSize, cloudSize, divis, divis, new Material(), 
-					Usage.Position | Usage.Normal | Usage.TextureCoordinates
-				));
+		clouds = genRenderable(modelBuilder.createSphere(cloudSize, cloudSize, cloudSize, 
+				divis, divis, new Material(), Usage.Position));
 
 		renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
 		
@@ -82,7 +80,6 @@ public class PlanetGenerator implements Generator{
 		
 		renderContext.end();
 		    
-		
 		Timers.update();
 	}
 	
@@ -90,7 +87,7 @@ public class PlanetGenerator implements Generator{
 	public void resize(int width, int height){
 		cam.viewportWidth = width;
 		cam.viewportHeight = height;
-		cam.update();
+		cam.update(true);
 	}
 
 	@Override
