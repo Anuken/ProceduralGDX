@@ -10,7 +10,6 @@ uniform float u_time;
 varying vec2 v_texCoord0;
 varying vec3 v_normal;
 varying float v_height;
-varying float v_mag;
 
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -107,38 +106,38 @@ float snoise(vec4 v){
 
 }
 
-float onoise(vec4 pos, int octaves, float falloff, float scl){
+float onoise(vec4 pos, int octaves, float falloff, float scl, float po){
     float sum = 0.0;
     float samp = 0.0;
     float amp = 1.0;
     float cscl = scl;
     
     for(int i = 0; i < octaves; i ++){
-        sum += (noise(pos / cscl) + 1.0) / 2.0 * amp;
+        sum += (snoise(pos / vec4(cscl, cscl, cscl, 1.0)) + 1.0) / 2.0 * amp;
         cscl /= 2.0;
         samp += amp;
         amp *= falloff;
     }
     
-    return sum / samp;
+    return pow(sum / samp, po);
 }
 
 void main() {
     v_texCoord0 = a_texCoord0;
     v_normal = a_normal;
     
+    vec3 center = vec3(u_projViewTrans * u_worldTrans * vec4(u_center, 1.0));
     vec4 pos = u_projViewTrans * u_worldTrans * vec4(a_position, 1.0);
     
-    float scl = 1.0;
-    float mag = 0.6;
+    float scl = 0.9;
     float tscl = 99.0;
-    float dst = 1.0 + ((snoise(vec4(a_position.xyz / scl, u_time / tscl)) + 1.0) / 2.0) * mag
-                    + ((snoise(vec4(a_position.xyz / scl * 2.0, u_time / tscl)) + 1.0) / 2.0) * mag/2.0
-                    + ((snoise(vec4(a_position.xyz / scl * 4.0, u_time / tscl)) + 1.0) / 2.0) * mag/4.0;
-    v_height = (dst - 1.2) / 1.2;
-    v_mag = mag;
+    float mag = 0.7;
+    float height = onoise(vec4(a_position.xyz, u_time / tscl), 3, 0.5, scl, 1.4);
+    float dst = 1.0 - (mag/2.0) + height*mag;
     
-    vec3 rel = (-vec3(pos) + ((pos - u_center) * dst + u_center));
+    v_height = clamp((height - 0.5) * 1.6 + 0.6, 0.0, 1.0);
+    
+    vec3 rel = (-vec3(pos) + ((pos - center) * dst + center));
     
     gl_Position = pos + vec4(rel, 0.0);
 }

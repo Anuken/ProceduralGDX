@@ -3,6 +3,9 @@ precision mediump float;
 #endif
 
 varying vec3 v_position;
+varying float v_scale;
+varying float v_falloff;
+varying float v_threshold;
 
 uniform float u_time;
 
@@ -97,19 +100,26 @@ float snoise(vec4 v){
 
 }
 
+float onoise(vec4 pos, int octaves, float falloff, float scl, float po){
+    float sum = 0.0;
+    float samp = 0.0;
+    float amp = 1.0;
+    float cscl = scl;
+    
+    for(int i = 0; i < octaves; i ++){
+        sum += (snoise(pos / vec4(cscl, cscl, cscl, 1.0)) + 1.0) / 2.0 * amp;
+        cscl /= 2.0;
+        samp += amp;
+        amp *= falloff;
+    }
+    
+    return pow(sum / samp, po);
+}
+
 void main() {
-    float f = 0.5;
-    float scl = 1.5;
+    float noise = onoise(vec4(v_position, u_time), 5, v_falloff, v_scale, 1.0);
     
-    float noise = 
-    snoise(vec4(v_position, u_time) / scl) + 
-    snoise(vec4(v_position, u_time) / scl * 2.0)*f +
-    snoise(vec4(v_position, u_time) / scl * 4.0)*f*f +
-    snoise(vec4(v_position, u_time) / scl * 8.0)*f*f*f +
-    snoise(vec4(v_position, u_time) / scl * 16.0)*f*f*f*f
-    ;
-    
-    if(noise > 0.3){
+    if(noise > v_threshold){
         gl_FragColor = vec4(1.0);
     }else{
         gl_FragColor = vec4(0.0);

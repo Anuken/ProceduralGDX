@@ -15,6 +15,7 @@ public class PlanetShader implements Shader {
     RenderContext context;
     String vert;
     String frag;
+    boolean shift = false;
     
     public PlanetShader(String name){
     	vert = Gdx.files.internal("3dshaders/"+name+".vertex").readString();
@@ -41,7 +42,7 @@ public class PlanetShader implements Shader {
     	program.begin();
     	program.setUniformMatrix("u_projViewTrans", camera.combined);
     	
-    	context.setDepthTest(GL20.GL_LESS);
+    	context.setDepthTest(GL20.GL_LEQUAL);
         context.setCullFace(GL20.GL_BACK);
         context.setBlending(true, GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
@@ -50,7 +51,7 @@ public class PlanetShader implements Shader {
     public void render (Renderable renderable) {  
     	program.setUniformMatrix("u_worldTrans", renderable.worldTransform);
     	program.setUniformf("u_center", renderable.meshPart.center);
-    	program.setUniformf("u_time", 0f);
+    	//program.setUniformf("u_time", shift ? Timers.time() : 0f);
     	renderable.meshPart.render(program);
     }
     

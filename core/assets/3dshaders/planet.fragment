@@ -16,8 +16,7 @@ const vec3 colors[colornum] = vec3[](
 varying vec2 v_texCoord0;
 varying vec3 v_normal;
 varying float v_height;
-varying float v_mag;
 
 void main() {
-    gl_FragColor = vec4(colors[int(clamp(v_height / v_mag, 0.0, 0.99) * float(colornum))], 1.0);
+    gl_FragColor = vec4(colors[int(v_height * float(colornum))], 1.0);
 }

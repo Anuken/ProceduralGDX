@@ -17,7 +17,8 @@ import io.anuke.ucore.scene.ui.layout.Table;
 public class PlanetGenerator implements Generator{
 	PerspectiveCamera cam;
 	CameraInputController camController;
-	Shader planetShader, cloudShader;
+	PlanetShader planetShader;
+	CloudShader cloudShader;
 	RenderContext renderContext;
 	Environment environment;
 	Renderable planet, clouds;
@@ -35,14 +36,15 @@ public class PlanetGenerator implements Generator{
 
 		ModelBuilder modelBuilder = new ModelBuilder();
 		
-		float planetSize = 2f, cloudSize = 3.3f;
+		float planetSize = 2f, cloudSize = 2.6f;
 		int divis = 100;
+		int divisc = 90;
 		
 		planet = genRenderable(modelBuilder.createSphere(planetSize, planetSize, planetSize, 
 				divis, divis, new Material(), Usage.Position));
 		
 		clouds = genRenderable(modelBuilder.createSphere(cloudSize, cloudSize, cloudSize, 
-				divis, divis, new Material(), Usage.Position));
+				divisc, divisc, new Material(), Usage.Position));
 
 		renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
 		
@@ -73,6 +75,7 @@ public class PlanetGenerator implements Generator{
 		planetShader.begin(cam, renderContext);
 		planetShader.render(planet);
 		planetShader.end();
+		
 		
 		cloudShader.begin(cam, renderContext);
 		cloudShader.render(clouds);
