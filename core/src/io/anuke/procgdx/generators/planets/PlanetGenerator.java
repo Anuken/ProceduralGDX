@@ -3,10 +3,11 @@ package io.anuke.procgdx.generators.planets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
-import com.badlogic.gdx.graphics.g3d.*;
-import com.badlogic.gdx.graphics.g3d.model.NodePart;
-import com.badlogic.gdx.graphics.g3d.utils.*;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
+import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
+import com.badlogic.gdx.utils.Array;
 
 import io.anuke.procgdx.Generator;
 import io.anuke.ucore.core.Core;
@@ -17,11 +18,9 @@ import io.anuke.ucore.scene.ui.layout.Table;
 public class PlanetGenerator implements Generator{
 	PerspectiveCamera cam;
 	CameraInputController camController;
-	PlanetShader planetShader;
-	CloudShader cloudShader;
 	RenderContext renderContext;
 	Environment environment;
-	Renderable planet, clouds;
+	Array<Planet> planets = new Array<>();
 
 	public PlanetGenerator(){
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -30,60 +29,29 @@ public class PlanetGenerator implements Generator{
 		cam.near = 1f;
 		cam.far = 100f;
 		cam.update();
+		
+		renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
 
 		camController = new CameraInputController(cam);
 		Inputs.addProcessor(camController);
-
-		ModelBuilder modelBuilder = new ModelBuilder();
-		
-		float planetSize = 2f, cloudSize = 2.6f;
-		int divis = 100;
-		int divisc = 90;
-		
-		planet = genRenderable(modelBuilder.createSphere(planetSize, planetSize, planetSize, 
-				divis, divis, new Material(), Usage.Position));
-		
-		clouds = genRenderable(modelBuilder.createSphere(cloudSize, cloudSize, cloudSize, 
-				divisc, divisc, new Material(), Usage.Position));
-
-		renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
-		
-	    planetShader = new PlanetShader("planet");
-		planetShader.init();
-		
-		cloudShader = new CloudShader("cloud");
-		cloudShader.init();
-	}
-	
-	Renderable genRenderable(Model model){
-		NodePart blockPart = model.nodes.get(0).parts.get(0);
-
-		Renderable renderable = new Renderable();
-		blockPart.setRenderable(renderable);
-		renderable.environment = null;
-		renderable.worldTransform.idt();
-		renderable.meshPart.update();
-		return renderable;
 	}
 
-	public void update(){
+	void update(){
 		camController.update();
 		
-
 		renderContext.begin();
 		
-		planetShader.begin(cam, renderContext);
-		planetShader.render(planet);
-		planetShader.end();
-		
-		
-		cloudShader.begin(cam, renderContext);
-		cloudShader.render(clouds);
-		cloudShader.end();
+		for(Planet planet : planets){
+			planet.render(cam, renderContext);
+		}
 		
 		renderContext.end();
 		    
 		Timers.update();
+	}
+	
+	void addPlanets(){
+		planets.add(new Asteroid());
 	}
 	
 	@Override
@@ -95,6 +63,8 @@ public class PlanetGenerator implements Generator{
 
 	@Override
 	public void build(Table table){
+		addPlanets();
+		
 		table.addRect((x, y, width, height)->{
 			
 			Gdx.graphics.requestRendering();
@@ -107,7 +77,9 @@ public class PlanetGenerator implements Generator{
 	@Override
 	public void dispose(Table table){
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		//shader.dispose();
-		//model.dispose();
+		
+		for(Planet planet : planets){
+			planet.dispose();
+		}
 	}
 }

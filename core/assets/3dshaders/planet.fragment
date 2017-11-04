@@ -2,25 +2,10 @@
 precision mediump float;
 #endif
 
-const MAX_COLORS = 15;
-
-uniform int u_octaves;
-uniform float u_falloff;
-uniform float u_scale;
-uniform float u_power;
-uniform float u_magnitude;
+const int MAX_COLORS = 15;
 
 uniform int u_colornum;
 uniform vec3 u_colors[MAX_COLORS];
-
-const vec3 colors[colornum] = vec3[](
-    vec3(58.0, 94.0, 198.0) / 255.0, //water
-    vec3(234.0, 211.0, 184.0) / 255.0, //sand
-    vec3(80.0, 160.0, 74.0) / 255.0, //grass
-    vec3(154.0, 191.0, 147.0) / 255.0, //more grass
-    vec3(200.0) / 255.0, //gray stuff
-    vec3(255.0, 255.0, 255.0) / 255.0  //snow
-);
 
 varying vec2 v_texCoord0;
 varying vec3 v_normal;
