@@ -2,7 +2,16 @@
 precision mediump float;
 #endif
 
-const int colornum = 6;
+const MAX_COLORS = 15;
+
+uniform int u_octaves;
+uniform float u_falloff;
+uniform float u_scale;
+uniform float u_power;
+uniform float u_magnitude;
+
+uniform int u_colornum;
+uniform vec3 u_colors[MAX_COLORS];
 
 const vec3 colors[colornum] = vec3[](
     vec3(58.0, 94.0, 198.0) / 255.0, //water
@@ -18,5 +27,5 @@ varying vec3 v_normal;
 varying float v_height;
 
 void main() {
-    gl_FragColor = vec4(colors[int(v_height * float(colornum))], 1.0);
+    gl_FragColor = vec4(u_colors[int(v_height * float(u_colornum))], 1.0);
 }
