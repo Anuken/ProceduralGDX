@@ -1,5 +1,8 @@
 ##Packr, build stuff
 
+*.gif
+
+
 /deploy/
 /desktop/packr-out/
 /desktop/packr-export/
