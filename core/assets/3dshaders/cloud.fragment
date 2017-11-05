@@ -3,11 +3,16 @@ precision mediump float;
 #endif
 
 varying vec3 v_position;
-varying float v_scale;
-varying float v_falloff;
-varying float v_threshold;
+
+uniform int u_octaves;
+uniform float u_scale;
+uniform float u_falloff;
+uniform float u_threshold;
 
 uniform float u_time;
+uniform float u_seed;
+
+uniform vec4 u_color;
 
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
 float permute(float x){return floor(mod(((x*34.0)+1.0)*x, 289.0));}
@@ -117,10 +122,10 @@ float onoise(vec4 pos, int octaves, float falloff, float scl, float po){
 }
 
 void main() {
-    float noise = onoise(vec4(v_position, u_time), 5, v_falloff, v_scale, 1.0);
+    float noise = onoise(vec4(v_position, u_time + u_seed), u_octaves, u_falloff, u_scale, 1.0);
     
-    if(noise > v_threshold){
-        gl_FragColor = vec4(1.0);
+    if(noise > u_threshold){
+        gl_FragColor = u_color;
     }else{
         gl_FragColor = vec4(0.0);
     }

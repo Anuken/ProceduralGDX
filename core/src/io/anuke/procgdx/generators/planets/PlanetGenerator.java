@@ -14,13 +14,14 @@ import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.scene.ui.layout.Table;
+import io.anuke.ucore.util.Mathf;
 
 public class PlanetGenerator implements Generator{
 	PerspectiveCamera cam;
 	CameraInputController camController;
 	RenderContext renderContext;
 	Environment environment;
-	Array<Planet> planets = new Array<>();
+	Array<RenderObject> objects = new Array<>();
 
 	public PlanetGenerator(){
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -41,8 +42,8 @@ public class PlanetGenerator implements Generator{
 		
 		renderContext.begin();
 		
-		for(Planet planet : planets){
-			planet.render(cam, renderContext);
+		for(RenderObject object : objects){
+			object.render(cam, renderContext);
 		}
 		
 		renderContext.end();
@@ -51,7 +52,16 @@ public class PlanetGenerator implements Generator{
 	}
 	
 	void addPlanets(){
-		planets.add(new Asteroid());
+		objects.add(new SpaceSphere());
+		
+		for(int i = 0; i < 5; i ++){
+			Asteroid a = new Asteroid();
+			float r = 4f;
+			a.setPosition(Mathf.range(r), Mathf.range(r), Mathf.range(r));
+			objects.add(a);
+		}
+		
+		objects.add(new EarthPlanet());
 	}
 	
 	@Override
@@ -78,7 +88,7 @@ public class PlanetGenerator implements Generator{
 	public void dispose(Table table){
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		
-		for(Planet planet : planets){
+		for(RenderObject planet : objects){
 			planet.dispose();
 		}
 	}

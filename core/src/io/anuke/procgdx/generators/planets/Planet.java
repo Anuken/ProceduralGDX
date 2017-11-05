@@ -4,19 +4,14 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.Renderable;
-import com.badlogic.gdx.graphics.g3d.model.NodePart;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.utils.Disposable;
 
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.util.Mathf;
 
-public class Planet implements Disposable{
-	static ModelBuilder modelBuilder = new ModelBuilder();
-	
+public class Planet implements Disposable, RenderObject{
 	ShaderAdapter planetShader, cloudShader;
 	Renderable planet, clouds;
 	
@@ -25,12 +20,20 @@ public class Planet implements Disposable{
 	float scale = 1f;
 	float power = 1.3f;
 	float magnitude = 0.6f;
-	float seed = Mathf.random(999999f);
+	
+	int octavesClouds = 5;
+	float falloffClouds = 0.5f;
+	float scaleClouds = 1.5f;
+	float thresholdClouds = 0.6f;
+	float speedClouds = 700f;
+	
+	float seed = Mathf.random(9999f);
 	
 	Color[] colors;
-	final boolean hasClouds;
-	
 	float[] colorValues;
+	
+	final boolean hasClouds;
+	Color cloudColor = Color.WHITE;
 	
 	/**Creates a planet with no clouds.*/
 	public Planet(float planetSize, int planetDivis, Color[] colors){
@@ -44,6 +47,7 @@ public class Planet implements Disposable{
 		this.colors = colors;
 		
 		colorValues = new float[colors.length*3];
+		
 		for(int i = 0; i < colors.length; i ++){
 			colorValues[i*3 + 0] = colors[i].r; 
 			colorValues[i*3 + 1] = colors[i].g; 
@@ -63,15 +67,21 @@ public class Planet implements Disposable{
 			shader.setUniform3fv("u_colors[0]", colorValues, 0, colorValues.length);
 		});
 		
-		planet = genRenderable(modelBuilder.createSphere(planetSize, planetSize, planetSize, 
+		planet = PlanetCreator.genRenderable(PlanetCreator.modelBuilder.createSphere(planetSize, planetSize, planetSize, 
 				planetDivis, planetDivis, new Material(), Usage.Position));
 		
 		if(hasClouds){
 			cloudShader = new ShaderAdapter("cloud", (shader, renderable)->{
-				shader.setUniformf("u_time", Timers.time() / 700f);
+				shader.setUniformf("u_time", Timers.time() / speedClouds);
+				shader.setUniformi("u_octaves", octavesClouds);
+				shader.setUniformf("u_falloff", falloffClouds);
+				shader.setUniformf("u_scale", scaleClouds);
+				shader.setUniformf("u_threshold", thresholdClouds);
+				shader.setUniformf("u_seed", seed);
+				shader.setUniformf("u_color", cloudColor);
 			});
 			
-			clouds = genRenderable(modelBuilder.createSphere(cloudSize, cloudSize, cloudSize, 
+			clouds = PlanetCreator.genRenderable(PlanetCreator.modelBuilder.createSphere(cloudSize, cloudSize, cloudSize, 
 					cloudDivis, cloudDivis, new Material(), Usage.Position));
 		}
 		
@@ -79,7 +89,8 @@ public class Planet implements Disposable{
 	
 	public void setPosition(float x, float y, float z){
 		planet.worldTransform.setToTranslation(x, y, z);
-		clouds.worldTransform.setToTranslation(x, y, z);
+		if(hasClouds)
+			clouds.worldTransform.setToTranslation(x, y, z);
 	}
 	
 	public void render(Camera cam, RenderContext renderContext){
@@ -92,17 +103,6 @@ public class Planet implements Disposable{
 			cloudShader.render(clouds);
 			cloudShader.end();
 		}
-	}
-	
-	private Renderable genRenderable(Model model){
-		NodePart blockPart = model.nodes.get(0).parts.get(0);
-
-		Renderable renderable = new Renderable();
-		blockPart.setRenderable(renderable);
-		renderable.environment = null;
-		renderable.worldTransform.idt();
-		renderable.meshPart.update();
-		return renderable;
 	}
 	
 	@Override

@@ -9,8 +9,10 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import io.anuke.gif.GifRecorder;
 import io.anuke.procgdx.generators.*;
 import io.anuke.procgdx.generators.planets.PlanetGenerator;
+import io.anuke.ucore.UCore;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Inputs;
+import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.modules.SceneModule;
 import io.anuke.ucore.scene.builders.build;
 import io.anuke.ucore.scene.builders.table;
@@ -76,6 +78,10 @@ public class UI extends SceneModule{
 	public void update(){
 		Graphics.clear(Color.BLACK);
 		super.update();
+		
+		if(Timers.get(this, "fps", 60)){
+			UCore.log(Gdx.graphics.getFramesPerSecond());
+		}
 		
 		recorder.update();
 		
