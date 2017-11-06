@@ -72,7 +72,7 @@ public class PlanetGenerator implements Generator{
 	}
 	
 	void addPlanets(){
-		objects.add(new SpaceSphere());
+		//objects.add(new SpaceSphere());
 		
 		for(int i = 0; i < 5; i ++){
 			Asteroid a = new Asteroid();
@@ -81,7 +81,8 @@ public class PlanetGenerator implements Generator{
 			objects.add(a);
 		}
 		
-		objects.add(new EarthPlanet());
+		//objects.add(new EarthPlanet());
+		objects.add(new GasGiant());
 	}
 	
 	@Override

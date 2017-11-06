@@ -36,11 +36,11 @@ public class Planet implements Disposable, RenderObject{
 	Color cloudColor = Color.WHITE;
 	
 	/**Creates a planet with no clouds.*/
-	public Planet(float planetSize, int planetDivis, Color[] colors){
-		this(false, planetSize, 0f, planetDivis, 0, colors);
+	public Planet(String shaderfile, float planetSize, int planetDivis, Color[] colors){
+		this(shaderfile, false, planetSize, 0f, planetDivis, 0, colors);
 	}
 	
-	public Planet(boolean hasClouds, float planetSize, float cloudSize, int planetDivis, int cloudDivis, 
+	public Planet(String shaderfile, boolean hasClouds, float planetSize, float cloudSize, int planetDivis, int cloudDivis, 
 			Color[] colors){
 		
 		this.hasClouds = hasClouds;
@@ -54,7 +54,7 @@ public class Planet implements Disposable, RenderObject{
 			colorValues[i*3 + 2] = colors[i].b; 
 		}
 		
-		planetShader = new ShaderAdapter("planet", (shader, renderable)->{
+		planetShader = new ShaderAdapter(shaderfile, (shader, renderable)->{
 			shader.setUniformi("u_octaves", octaves);
 			shader.setUniformf("u_falloff", falloff);
 			shader.setUniformf("u_scale", scale);

@@ -7,7 +7,7 @@ import io.anuke.ucore.graphics.Hue;
 public class Asteroid extends Planet{
 
 	public Asteroid() {
-		super(1f, 60, new Color[]{
+		super("planet", 1f, 60, new Color[]{
 			//Hue.mix(Hue.lightness(0.3f), Color.BROWN, 0.0f),
 			Hue.mix(Hue.lightness(0.4f), Color.BROWN, 0.0f),
 			Hue.mix(Hue.lightness(0.5f), Color.BROWN, 0.1f),
