@@ -37,10 +37,10 @@ project(":core") {
 
 
     dependencies {
-        compile fileTree(dir: '../core/lib', include: '*.jar')
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile 'com.github.anuken:ucore:94bd176279'
+        compile 'com.github.anuken:ucore:-SNAPSHOT'
+        compile 'com.github.anuken:gdx-postprocessing:-SNAPSHOT'
         compile 'com.github.anuken:gdxgifrecorder:-SNAPSHOT'
     }
 }

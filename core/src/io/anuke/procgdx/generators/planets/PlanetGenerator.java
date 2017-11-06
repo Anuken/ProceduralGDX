@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.utils.Array;
+import com.bitfire.postprocessing.PostProcessor;
+import com.bitfire.postprocessing.effects.Bloom;
+import com.bitfire.utils.ShaderLoader;
 
 import io.anuke.procgdx.Generator;
 import io.anuke.ucore.core.Core;
@@ -21,6 +24,9 @@ public class PlanetGenerator implements Generator{
 	CameraInputController camController;
 	RenderContext renderContext;
 	Environment environment;
+	PostProcessor post;
+	boolean postProcess = false;
+	
 	Array<RenderObject> objects = new Array<>();
 
 	public PlanetGenerator(){
@@ -35,6 +41,10 @@ public class PlanetGenerator implements Generator{
 
 		camController = new CameraInputController(cam);
 		Inputs.addProcessor(camController);
+		
+		ShaderLoader.BasePath = "shaders/";
+		
+		addEffects();
 	}
 
 	void update(){
@@ -49,6 +59,16 @@ public class PlanetGenerator implements Generator{
 		renderContext.end();
 		    
 		Timers.update();
+	}
+	
+	void addEffects(){
+		post = new PostProcessor(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, true, true);
+		
+		Bloom bloom = new Bloom(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4);
+		bloom.setThreshold(0.8f);
+		bloom.setBlurPasses(5);
+		bloom.setBaseSaturation(1f);
+		post.addEffect(bloom);
 	}
 	
 	void addPlanets(){
@@ -69,6 +89,9 @@ public class PlanetGenerator implements Generator{
 		cam.viewportWidth = width;
 		cam.viewportHeight = height;
 		cam.update(true);
+		
+		post.dispose();
+		addEffects();
 	}
 
 	@Override
@@ -79,7 +102,9 @@ public class PlanetGenerator implements Generator{
 			
 			Gdx.graphics.requestRendering();
 			Core.batch.end();
+			if(postProcess) post.capture();
 			update();
+			if(postProcess) post.render();
 			Core.batch.begin();
 		}).grow();
 	}
@@ -91,5 +116,8 @@ public class PlanetGenerator implements Generator{
 		for(RenderObject planet : objects){
 			planet.dispose();
 		}
+		
+		post.dispose();
+		objects.clear();
 	}
 }

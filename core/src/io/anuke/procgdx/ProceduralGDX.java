@@ -10,7 +10,7 @@ public class ProceduralGDX extends ModuleCore {
 	@Override
 	public void init(){
 		Core.batch = new SpriteBatch();
-		add(new UI());
+		module(new UI());
 	}
 	
 }
