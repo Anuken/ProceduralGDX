@@ -24,7 +24,7 @@ public class PlanetGenerator implements Generator{
 	CameraInputController camController;
 	RenderContext renderContext;
 	PostProcessor post;
-	boolean postProcess = false;
+	boolean postProcess = true;
 	
 	Array<RenderObject> objects = new Array<>();
 	Array<RenderableProvider> renderables = new Array<>();
@@ -72,7 +72,7 @@ public class PlanetGenerator implements Generator{
 	}
 	
 	void addPlanets(){
-		//objects.add(new SpaceSphere());
+		objects.add(new SpaceSphere());
 		
 		for(int i = 0; i < 5; i ++){
 			Asteroid a = new Asteroid();
@@ -81,8 +81,9 @@ public class PlanetGenerator implements Generator{
 			objects.add(a);
 		}
 		
-		objects.add(new EarthPlanet());
-		objects.add(new GasGiant().setPosition(4, 4, 4));
+		objects.add(new EarthPlanet().setPosition(4, 4, 4));
+		objects.add(new GasGiant().setPosition(-4, -4, -4));
+		objects.add(new LavaPlanet());
 	}
 	
 	@Override

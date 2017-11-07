@@ -6,10 +6,10 @@ import io.anuke.ucore.core.Timers;
 
 public class GasGiant extends Planet{
 	static String alpha = "ff";
-	float compression = 4f;
+	float compression = 6f;
 	
 	public GasGiant() {
-		super(false, 2f, 2.6f, 120, 50, new Color[]{
+		super(true, 4f, 4.15f, 120, 50, new Color[]{
 			Color.valueOf("ffbd54"+alpha),
 			Color.valueOf("f4c882"+alpha),
 			Color.valueOf("f4a582"+alpha),
@@ -18,10 +18,17 @@ public class GasGiant extends Planet{
 			Color.valueOf("eae8a9"+alpha)
 		});
 		
+		octavesClouds = 4;
+		cloudColor = Color.valueOf("dec45d");
+		cloudColor.a = 0.2f;
+		scaleClouds = 1f*2f;
+		falloffClouds = 0.5f;
+		thresholdClouds = 0.5f;
+		
 		octaves = 3;
-		scale = 1.4f;
+		scale = 1.4f*2f;
 		power = 1f;
-		magnitude = 0.5f;
+		magnitude = 0f;
 		
 		planetShader = new ShaderAdapter("gasgiant", (shader, renderable)->{
 			shader.setUniformi("u_octaves", octaves);
@@ -30,7 +37,7 @@ public class GasGiant extends Planet{
 			shader.setUniformf("u_power", power);
 			shader.setUniformf("u_compression", compression);
 			shader.setUniformf("u_magnitude", magnitude);
-			shader.setUniformf("u_time", Timers.time() / 700f);
+			shader.setUniformf("u_time", Timers.time() / 800f);
 			shader.setUniformf("u_seed", seed);
 			
 			shader.setUniformi("u_colornum", colors.length);

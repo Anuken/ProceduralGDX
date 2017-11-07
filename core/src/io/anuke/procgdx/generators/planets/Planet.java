@@ -20,6 +20,8 @@ public class Planet implements Disposable, RenderObject{
 	float scale = 1f;
 	float power = 1.3f;
 	float magnitude = 0.6f;
+	float speed = 99999999999f;
+	float spread = 1.3f;
 	
 	int octavesClouds = 5;
 	float falloffClouds = 0.5f;
@@ -63,8 +65,9 @@ public class Planet implements Disposable, RenderObject{
 			shader.setUniformf("u_scale", scale);
 			shader.setUniformf("u_power", power);
 			shader.setUniformf("u_magnitude", magnitude);
-			shader.setUniformf("u_time", 0f);
+			shader.setUniformf("u_time", Timers.time() / speed);
 			shader.setUniformf("u_seed", seed);
+			shader.setUniformf("u_spread", spread);
 			
 			shader.setUniformi("u_waterLevel", waterLevel);
 			
