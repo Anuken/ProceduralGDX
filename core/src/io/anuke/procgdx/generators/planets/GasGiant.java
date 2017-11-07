@@ -2,18 +2,39 @@ package io.anuke.procgdx.generators.planets;
 
 import com.badlogic.gdx.graphics.Color;
 
-import io.anuke.ucore.graphics.Hue;
+import io.anuke.ucore.core.Timers;
 
 public class GasGiant extends Planet{
-
+	static String alpha = "ff";
+	float compression = 4f;
+	
 	public GasGiant() {
-		super("gasgiant", false, 2f, 2.6f, 120, 50, new Color[]{
-			Hue.rgb(58, 94, 198), //water
-			Hue.rgb(234, 211, 184), //sand
-			Hue.rgb(80, 160, 74), //grass
-			Hue.rgb(154, 191, 147), //more grass
-			Hue.lightness(200 / 256f), //gray stuff
-			Hue.rgb(255, 255, 255)  //snow
+		super(false, 2f, 2.6f, 120, 50, new Color[]{
+			Color.valueOf("ffbd54"+alpha),
+			Color.valueOf("f4c882"+alpha),
+			Color.valueOf("f4a582"+alpha),
+			Color.valueOf("ecbaa4"+alpha),
+			Color.valueOf("ef8e84"+alpha),
+			Color.valueOf("eae8a9"+alpha)
+		});
+		
+		octaves = 3;
+		scale = 1.4f;
+		power = 1f;
+		magnitude = 0.5f;
+		
+		planetShader = new ShaderAdapter("gasgiant", (shader, renderable)->{
+			shader.setUniformi("u_octaves", octaves);
+			shader.setUniformf("u_falloff", falloff);
+			shader.setUniformf("u_scale", scale);
+			shader.setUniformf("u_power", power);
+			shader.setUniformf("u_compression", compression);
+			shader.setUniformf("u_magnitude", magnitude);
+			shader.setUniformf("u_time", Timers.time() / 700f);
+			shader.setUniformf("u_seed", seed);
+			
+			shader.setUniformi("u_colornum", colors.length);
+			shader.setUniform4fv("u_colors[0]", colorValues, 0, colorValues.length);
 		});
 	}
 

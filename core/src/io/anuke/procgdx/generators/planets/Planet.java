@@ -38,25 +38,26 @@ public class Planet implements Disposable, RenderObject{
 	Color cloudColor = Color.WHITE;
 	
 	/**Creates a planet with no clouds.*/
-	public Planet(String shaderfile, float planetSize, int planetDivis, Color[] colors){
-		this(shaderfile, false, planetSize, 0f, planetDivis, 0, colors);
+	public Planet(float planetSize, int planetDivis, Color[] colors){
+		this(false, planetSize, 0f, planetDivis, 0, colors);
 	}
 	
-	public Planet(String shaderfile, boolean hasClouds, float planetSize, float cloudSize, int planetDivis, int cloudDivis, 
+	public Planet(boolean hasClouds, float planetSize, float cloudSize, int planetDivis, int cloudDivis, 
 			Color[] colors){
 		
 		this.hasClouds = hasClouds;
 		this.colors = colors;
 		
-		colorValues = new float[colors.length*3];
+		colorValues = new float[colors.length*4];
 		
 		for(int i = 0; i < colors.length; i ++){
-			colorValues[i*3 + 0] = colors[i].r; 
-			colorValues[i*3 + 1] = colors[i].g; 
-			colorValues[i*3 + 2] = colors[i].b; 
+			colorValues[i*4 + 0] = colors[i].r; 
+			colorValues[i*4 + 1] = colors[i].g; 
+			colorValues[i*4 + 2] = colors[i].b; 
+			colorValues[i*4 + 3] = colors[i].a; 
 		}
 		
-		planetShader = new ShaderAdapter(shaderfile, (shader, renderable)->{
+		planetShader = new ShaderAdapter("planet", (shader, renderable)->{
 			shader.setUniformi("u_octaves", octaves);
 			shader.setUniformf("u_falloff", falloff);
 			shader.setUniformf("u_scale", scale);
@@ -68,7 +69,7 @@ public class Planet implements Disposable, RenderObject{
 			shader.setUniformi("u_waterLevel", waterLevel);
 			
 			shader.setUniformi("u_colornum", colors.length);
-			shader.setUniform3fv("u_colors[0]", colorValues, 0, colorValues.length);
+			shader.setUniform4fv("u_colors[0]", colorValues, 0, colorValues.length);
 		});
 		
 		planet = PlanetCreator.genRenderable(PlanetCreator.modelBuilder.createSphere(planetSize, planetSize, planetSize, 

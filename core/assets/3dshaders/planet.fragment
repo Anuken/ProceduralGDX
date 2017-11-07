@@ -2,12 +2,12 @@
 precision mediump float;
 #endif
 
-#define gradients true
+#define gradients false
 
 const int MAX_COLORS = 15;
 
 uniform int u_colornum;
-uniform vec3 u_colors[MAX_COLORS];
+uniform vec4 u_colors[MAX_COLORS];
 uniform int u_waterLevel;
 
 varying vec2 v_texCoord0;
@@ -25,10 +25,10 @@ void main() {
             alpha = 0;
         }
     
-        gl_FragColor = vec4(mix(u_colors[from], u_colors[to], alpha), 1.0);
+        gl_FragColor = vec4(mix(u_colors[from], u_colors[to], alpha));
     }else{
         int from = int(v_height * float(u_colornum));
-        gl_FragColor = vec4(u_colors[from], 1.0);
+        gl_FragColor = u_colors[from];
     }
     
 }

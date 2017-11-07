@@ -3,6 +3,7 @@ package io.anuke.procgdx.generators.planets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
@@ -26,6 +27,7 @@ public class PlanetGenerator implements Generator{
 	boolean postProcess = false;
 	
 	Array<RenderObject> objects = new Array<>();
+	Array<RenderableProvider> renderables = new Array<>();
 
 	public PlanetGenerator(){
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -80,7 +82,7 @@ public class PlanetGenerator implements Generator{
 		}
 		
 		objects.add(new EarthPlanet());
-		//objects.add(new GasGiant().setPosition(4, 4, 4));
+		objects.add(new GasGiant().setPosition(4, 4, 4));
 	}
 	
 	@Override
