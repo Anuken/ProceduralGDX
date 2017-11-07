@@ -27,6 +27,8 @@ public class Planet implements Disposable, RenderObject{
 	float thresholdClouds = 0.6f;
 	float speedClouds = 700f;
 	
+	int waterLevel = 1;
+	
 	float seed = Mathf.random(9999f);
 	
 	Color[] colors;
@@ -63,6 +65,8 @@ public class Planet implements Disposable, RenderObject{
 			shader.setUniformf("u_time", 0f);
 			shader.setUniformf("u_seed", seed);
 			
+			shader.setUniformi("u_waterLevel", waterLevel);
+			
 			shader.setUniformi("u_colornum", colors.length);
 			shader.setUniform3fv("u_colors[0]", colorValues, 0, colorValues.length);
 		});
@@ -87,10 +91,12 @@ public class Planet implements Disposable, RenderObject{
 		
 	}
 	
-	public void setPosition(float x, float y, float z){
+	public Planet setPosition(float x, float y, float z){
 		planet.worldTransform.setToTranslation(x, y, z);
 		if(hasClouds)
 			clouds.worldTransform.setToTranslation(x, y, z);
+		
+		return this;
 	}
 	
 	public void render(Camera cam, RenderContext renderContext){

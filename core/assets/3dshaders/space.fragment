@@ -130,7 +130,6 @@ void main() {
     light_n = round(clamp(light_n, 0.0, 1.0), 0.03);
     white_n = round(clamp(white_n, 0.0, 1.0), 0.03);
     
-    
     if(star_n > 0.4 && star_ns > 0.9){
         gl_FragColor = vec4(mix(star1, star2, star_tint), 1.0);
     }else{

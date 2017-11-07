@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 
 public class SpaceSphere implements RenderObject{
 	private static final float radius = 40f;
-	private static final int divisions = 100;
+	private static final int divisions = 30;
 	
 	private Shader shader;
 	private Renderable sphere;

@@ -17,6 +17,7 @@ public class Asteroid extends Planet{
 			Hue.mix(Hue.lightness(0.9f), Color.BROWN, 0.5f),
 		});
 		
+		waterLevel = 0;
 		magnitude = 1.5f;
 		power = 1f;
 	}
