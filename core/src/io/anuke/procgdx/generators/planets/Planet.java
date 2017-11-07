@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.utils.Disposable;
 
 import io.anuke.ucore.core.Timers;
+import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
 
 public class Planet implements Disposable, RenderObject{
@@ -38,6 +39,10 @@ public class Planet implements Disposable, RenderObject{
 	
 	final boolean hasClouds;
 	Color cloudColor = Color.WHITE;
+	
+	boolean orbit;
+	float orbitLength;
+	float orbitAng = 0f;
 	
 	/**Creates a planet with no clouds.*/
 	public Planet(float planetSize, int planetDivis, Color[] colors){
@@ -103,7 +108,20 @@ public class Planet implements Disposable, RenderObject{
 		return this;
 	}
 	
+	public Planet setOrbit(float length){
+		orbit = true;
+		orbitLength = length;
+		orbitAng = Mathf.random(360f);
+		return this;
+	}
+	
 	public void render(Camera cam, RenderContext renderContext){
+		if(orbit){
+			orbitAng += 1f/orbitLength * Timers.delta();
+			Angles.translation(orbitAng, orbitLength);
+			setPosition(Angles.x(), 0f, Angles.y());
+		}
+		
 		planetShader.begin(cam, renderContext);
 		planetShader.render(planet);
 		planetShader.end();

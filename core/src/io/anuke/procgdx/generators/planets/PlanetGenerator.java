@@ -74,16 +74,17 @@ public class PlanetGenerator implements Generator{
 	void addPlanets(){
 		objects.add(new SpaceSphere());
 		
-		for(int i = 0; i < 5; i ++){
+		for(int i = 0; i < 6; i ++){
 			Asteroid a = new Asteroid();
-			float r = 4f;
-			a.setPosition(Mathf.range(r), Mathf.range(r), Mathf.range(r));
+			a.setOrbit(21f + Mathf.range(0.5f));
 			objects.add(a);
 		}
 		
-		objects.add(new EarthPlanet().setPosition(4, 4, 4));
-		objects.add(new GasGiant().setPosition(-4, -4, -4));
-		objects.add(new LavaPlanet());
+		objects.add(new EarthPlanet().setOrbit(11f));
+		objects.add(new GasGiant().setOrbit(17f));
+		objects.add(new LavaPlanet().setOrbit(7f));
+		objects.add(new IcePlanet().setOrbit(26f));
+		objects.add(new Sun());
 	}
 	
 	@Override

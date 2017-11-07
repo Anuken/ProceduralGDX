@@ -18,7 +18,7 @@ public class LavaPlanet extends Planet{
 		cloudColor = Color.valueOf("5a5a5a");
 		cloudColor.a = 0.8f;
 		
-		spread = 1.6f;
+		spread = 1.5f;
 		falloff = 0.5f;
 		octaves = 6;
 		scale = 1.7f;

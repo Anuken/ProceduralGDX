@@ -121,11 +121,12 @@ const vec3 star1 = vec3(1.0);
 const vec3 star2 = vec3(194.0, 227.0, 255.0) / 300.0;
 
 void main() {
-    float light_n = (onoise(vec4(v_position, 0.0), 5, 0.7, 8.0, 1.0) - 0.2) / 2.5;
-    float white_n = (onoise(vec4(v_position, 99.0), 5, 0.5, 20.0, 1.0) - 0.6);
-    float star_n = (onoise(vec4(v_position, 999.0), 3, 0.8, 10.0, 1.0));
+    float scl = 2.0;
+    float light_n = (onoise(vec4(v_position, 0.0), 5, 0.7, 8.0 * scl, 1.0) - 0.2) / 2.5;
+    float white_n = (onoise(vec4(v_position, 99.0), 5, 0.5, 20.0 * scl, 1.0) - 0.6);
+    float star_n = (onoise(vec4(v_position, 999.0), 3, 0.8, 10.0 * scl, 1.0));
     float star_ns = (onoise(vec4(v_position, 9999.0), 2, 0.8, 0.14, 1.0));
-    float star_tint = (onoise(vec4(v_position, 999.0), 2, 0.8, 15.0, 1.0));
+    float star_tint = (onoise(vec4(v_position, 999.0), 2, 0.8, 15.0 * scl, 1.0));
     
     light_n = round(clamp(light_n, 0.0, 1.0), 0.03);
     white_n = round(clamp(white_n, 0.0, 1.0), 0.03);
