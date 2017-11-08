@@ -18,11 +18,11 @@ void main() {
     
     if(gradients){
         int from = int(v_height * float(u_colornum));
-        int to = clamp(int(v_height * float(u_colornum) + 1.0), 0.0, float(u_colornum)-1.0);
+        int to = int(clamp(float(int(v_height * float(u_colornum) + 1.0)), 0.0, float(u_colornum)-1.0));
         float alpha = fract(v_height * float(u_colornum));
         
         if(from < u_waterLevel){
-            alpha = 0;
+            alpha = 0.0;
         }
     
         gl_FragColor = vec4(mix(u_colors[from], u_colors[to], alpha));

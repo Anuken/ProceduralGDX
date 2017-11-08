@@ -141,7 +141,7 @@ void main() {
     float height = onoise(vec4(a_position.xyz * vec3(1.0, u_compression, 1.0), u_time + u_seed), u_octaves, u_falloff, u_scale, u_power);
     float dst = 1.0 - (u_magnitude/2.0) + height*u_magnitude;
     
-    float toflatten = onoise(vec4(a_position.xyz, u_time + u_seed*2), u_octaves, u_falloff, u_scale, u_power) - 0.5;
+    float toflatten = onoise(vec4(a_position.xyz, u_time + u_seed*2.0), u_octaves, u_falloff, u_scale, u_power) - 0.5;
     float flattened = 0.5;
     
     if(toflatten > 0.5){

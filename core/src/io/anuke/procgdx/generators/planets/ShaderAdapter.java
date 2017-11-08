@@ -22,8 +22,8 @@ public class ShaderAdapter implements Shader{
 		String frag = Gdx.files.internal("3dshaders/"+name+".fragment").readString();
 		
 		program = new ShaderProgram(vert, frag);
-        if (!program.isCompiled())
-            throw new GdxRuntimeException(program.getLog());
+        if (!program.isCompiled() || !program.getLog().equals(""))
+            throw new GdxRuntimeException("Error compiling shader \""+name+"\": " + program.getLog());
 	}
 
 	@Override
