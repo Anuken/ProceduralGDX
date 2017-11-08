@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Scaling;
 
 import io.anuke.procgdx.Generator;
 import io.anuke.ucore.function.BiConsumer;
+import io.anuke.ucore.function.StringSupplier;
 import io.anuke.ucore.scene.style.TextureRegionDrawable;
 import io.anuke.ucore.scene.ui.Image;
 import io.anuke.ucore.scene.ui.Slider;
@@ -29,7 +30,7 @@ public abstract class ImageGenerator implements Generator{
 		
 		image.setScaling(Scaling.fit);
 		
-		table.add(()->"Size: " + (int)slider.getValue()).colspan(2).pad(4);
+		table.add((StringSupplier)()->"Size: " + (int)slider.getValue()).colspan(2).pad(4);
 		
 		table.row();
 		

@@ -80,11 +80,13 @@ public class PlanetGenerator implements Generator{
 			objects.add(a);
 		}
 		
+		objects.add(new Sun());
 		objects.add(new EarthPlanet().setOrbit(11f));
 		objects.add(new GasGiant().setOrbit(17f));
-		objects.add(new LavaPlanet().setOrbit(7f));
 		objects.add(new IcePlanet().setOrbit(26f));
-		objects.add(new Sun());
+		objects.add(new LavaPlanet().setOrbit(7f));
+		
+		
 	}
 	
 	@Override

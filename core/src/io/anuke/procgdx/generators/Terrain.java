@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+import io.anuke.ucore.function.StringSupplier;
 import io.anuke.ucore.noise.Simplex;
 import io.anuke.ucore.scene.ui.layout.Table;
 import io.anuke.ucore.util.Mathf;
@@ -83,7 +84,7 @@ public class Terrain extends ImageGenerator{
 			update();
 		});
 		
-		four.add(()->"Scale: " + scale).left().width(40).padBottom(5);
+		four.add((StringSupplier)()->"Scale: " + scale).left().width(40).padBottom(5);
 		four.row();
 		four.addSlider(0.01f, 5f, 0.001f, scale, true, f->{
 			scale = f;
@@ -92,14 +93,14 @@ public class Terrain extends ImageGenerator{
 			update();
 		}).left().growX();
 		
-		one.add(()->"Elevation Octaves: " + eloct).left().pad(10).width(100);
+		one.add((StringSupplier)()->"Elevation Octaves: " + eloct).left().pad(10).width(100);
 		one.row();
 		one.addSlider(1, 20, 1, 5f, true, f->{
 			eloct = (int)(float)f;
 			update();
 		}).growX().pad(5);
 		
-		two.add(()->"Temperature Octaves: " + tempoct).left().pad(10).width(100);
+		two.add((StringSupplier)()->"Temperature Octaves: " + tempoct).left().pad(10).width(100);
 		two.row();
 		two.addSlider(1, 20, 1, 7f, true, f->{
 			tempoct = (int)(float)f;
