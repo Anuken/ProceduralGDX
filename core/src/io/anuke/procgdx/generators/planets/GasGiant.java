@@ -19,7 +19,7 @@ public class GasGiant extends Planet{
 		});
 		
 		octavesClouds = 4;
-		cloudColor = Color.valueOf("dec45d");
+		cloudColor = Color.valueOf("fffa6c");
 		cloudColor.a = 0.2f;
 		scaleClouds = 1f*2f;
 		falloffClouds = 0.5f;

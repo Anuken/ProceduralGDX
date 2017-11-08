@@ -34,7 +34,7 @@ public class PlanetGenerator implements Generator{
 		cam.position.set(2f, 2f, 2f);
 		cam.lookAt(0, 0, 0);
 		cam.near = 1f;
-		cam.far = 100f;
+		cam.far = 200f;
 		cam.update();
 		
 		renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
