@@ -8,7 +8,8 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 
 import io.anuke.gif.GifRecorder;
 import io.anuke.procgdx.generators.*;
-import io.anuke.procgdx.generators.planets.PlanetGenerator;
+import io.anuke.procgdx.generators.planets.ShaderPlanetGenerator;
+import io.anuke.procgdx.generators.planets.StaticPlanetGenerator;
 import io.anuke.ucore.UCore;
 import io.anuke.ucore.core.Graphics;
 import io.anuke.ucore.core.Inputs;
@@ -21,7 +22,8 @@ import io.anuke.ucore.scene.ui.TextButton;
 import io.anuke.ucore.scene.ui.layout.Table;
 
 public class UI extends SceneModule{
-	Generator[] generators = {new PlanetGenerator(), new Terrain(), new VoxelClouds(), new VoxelTerrain(), new HeightmapTerrain(), new RGBNoise()};
+	Generator[] generators = {new StaticPlanetGenerator(), new ShaderPlanetGenerator(), new Terrain(), new VoxelClouds(), 
+			new VoxelTerrain(), new HeightmapTerrain(), new RGBNoise()};
 	Generator current = generators[0];
 	Table genTable;
 	GifRecorder recorder = new GifRecorder(new SpriteBatch());

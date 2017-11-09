@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 
-public class PlanetCreator{
+public class MeshCreator{
 	public static ModelBuilder modelBuilder = new ModelBuilder();
 
 	public static Renderable genRenderable(Model model){
@@ -18,4 +18,5 @@ public class PlanetCreator{
 		renderable.meshPart.update();
 		return renderable;
 	}
+	
 }

@@ -3,33 +3,38 @@ package io.anuke.procgdx.generators.planets;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.RenderableProvider;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
-import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
-import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.utils.Array;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.postprocessing.effects.Bloom;
 import com.bitfire.utils.ShaderLoader;
 
 import io.anuke.procgdx.Generator;
+import io.anuke.procgdx.generators.planets.types.TestStatic;
 import io.anuke.ucore.core.Core;
 import io.anuke.ucore.core.Inputs;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.scene.ui.layout.Table;
-import io.anuke.ucore.util.Mathf;
 
-public class PlanetGenerator implements Generator{
+public class StaticPlanetGenerator implements Generator{
 	PerspectiveCamera cam;
 	CameraInputController camController;
-	RenderContext renderContext;
+	Environment environment;
+	ModelBatch batch;
+	
 	PostProcessor post;
 	boolean postProcess = true;
 	
-	Array<RenderObject> objects = new Array<>();
 	Array<RenderableProvider> renderables = new Array<>();
 
-	public PlanetGenerator(){
+	public StaticPlanetGenerator(){
+		batch = new ModelBatch();
+		
 		cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		cam.position.set(2f, 2f, 2f);
 		cam.lookAt(0, 0, 0);
@@ -37,12 +42,15 @@ public class PlanetGenerator implements Generator{
 		cam.far = 200f;
 		cam.update();
 		
-		renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
+		environment = new Environment();
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
 		camController = new CameraInputController(cam);
 		Inputs.addProcessor(camController);
 		
 		ShaderLoader.BasePath = "shaders/";
+		ShaderLoader.Pedantic = false;
 		
 		addEffects();
 	}
@@ -50,13 +58,11 @@ public class PlanetGenerator implements Generator{
 	void update(){
 		camController.update();
 		
-		renderContext.begin();
-		
-		for(RenderObject object : objects){
-			object.render(cam, renderContext);
+		batch.begin(cam);
+		for(RenderableProvider r : renderables){
+			batch.render(r, environment);
 		}
-		
-		renderContext.end();
+		batch.end();
 		    
 		Timers.update();
 	}
@@ -72,21 +78,7 @@ public class PlanetGenerator implements Generator{
 	}
 	
 	void addPlanets(){
-		objects.add(new SpaceSphere());
-		
-		for(int i = 0; i < 6; i ++){
-			Asteroid a = new Asteroid();
-			a.setOrbit(21f + Mathf.range(0.5f));
-			objects.add(a);
-		}
-		
-		objects.add(new Sun());
-		objects.add(new EarthPlanet().setOrbit(11f));
-		objects.add(new GasGiant().setOrbit(17f));
-		objects.add(new IcePlanet().setOrbit(26f));
-		objects.add(new LavaPlanet().setOrbit(7f));
-		
-		
+		renderables.add(new TestStatic());
 	}
 	
 	@Override
@@ -118,11 +110,7 @@ public class PlanetGenerator implements Generator{
 	public void dispose(Table table){
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		
-		for(RenderObject planet : objects){
-			planet.dispose();
-		}
-		
 		post.dispose();
-		objects.clear();
+		renderables.clear();
 	}
 }

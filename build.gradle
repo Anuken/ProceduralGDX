@@ -39,7 +39,7 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile 'com.github.anuken:ucore:-SNAPSHOT'
+        //compile 'com.github.anuken:ucore:-SNAPSHOT'
         compile 'com.github.anuken:gdx-postprocessing:-SNAPSHOT'
         compile 'com.github.anuken:gdxgifrecorder:-SNAPSHOT'
     }

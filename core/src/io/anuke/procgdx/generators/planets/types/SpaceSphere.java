@@ -1,4 +1,4 @@
-package io.anuke.procgdx.generators.planets;
+package io.anuke.procgdx.generators.planets.types;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
@@ -6,6 +6,10 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
+
+import io.anuke.procgdx.generators.planets.MeshCreator;
+import io.anuke.procgdx.generators.planets.RenderObject;
+import io.anuke.procgdx.generators.planets.ShaderAdapter;
 
 public class SpaceSphere implements RenderObject{
 	private static final float radius = 80f;
@@ -17,7 +21,7 @@ public class SpaceSphere implements RenderObject{
 	public SpaceSphere(){
 		shader = new ShaderAdapter("space", (shader, renderable)->{});
 		
-		sphere = PlanetCreator.genRenderable(PlanetCreator.modelBuilder.createSphere(radius, radius, radius, 
+		sphere = MeshCreator.genRenderable(MeshCreator.modelBuilder.createSphere(radius, radius, radius, 
 				divisions, divisions, new Material(), Usage.Position | Usage.Normal));
 		
 		float[] vertices = sphere.meshPart.mesh.getVertices(new float[sphere.meshPart.mesh.getNumVertices() * 6]);

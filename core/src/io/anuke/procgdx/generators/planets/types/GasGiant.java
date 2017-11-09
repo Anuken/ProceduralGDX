@@ -1,7 +1,8 @@
-package io.anuke.procgdx.generators.planets;
+package io.anuke.procgdx.generators.planets.types;
 
 import com.badlogic.gdx.graphics.Color;
 
+import io.anuke.procgdx.generators.planets.ShaderAdapter;
 import io.anuke.ucore.core.Timers;
 
 public class GasGiant extends Planet{

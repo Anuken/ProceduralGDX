@@ -21,7 +21,7 @@ public class VoxelClouds extends VoxelGenerator{
 		plex.setSeed(MathUtils.random(99999999));
 		
 		forEach((x, y, z)->{
-			float noise = (float)(plex.octave_noise_3d(4f, 0.5f, 1f/scale, x, y*3f, z) + 1f) / 2f - 
+			float noise = (float)(plex.octaveNoise3D(4f, 0.5f, 1f/scale, x, y*3f, z) + 1f) / 2f - 
 					Vector3.dst(x, y, z, size/2, size/2, size/2) / (size * 2);
 			
 			if(noise > 0.6f){

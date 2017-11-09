@@ -1,4 +1,4 @@
-package io.anuke.procgdx.generators.planets;
+package io.anuke.procgdx.generators.planets.types;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.utils.Disposable;
 
+import io.anuke.procgdx.generators.planets.MeshCreator;
+import io.anuke.procgdx.generators.planets.RenderObject;
+import io.anuke.procgdx.generators.planets.ShaderAdapter;
 import io.anuke.ucore.core.Timers;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
@@ -80,7 +83,7 @@ public class Planet implements Disposable, RenderObject{
 			shader.setUniform4fv("u_colors[0]", colorValues, 0, colorValues.length);
 		});
 		
-		planet = PlanetCreator.genRenderable(PlanetCreator.modelBuilder.createSphere(planetSize, planetSize, planetSize, 
+		planet = MeshCreator.genRenderable(MeshCreator.modelBuilder.createSphere(planetSize, planetSize, planetSize, 
 				planetDivis, planetDivis, new Material(), Usage.Position));
 		
 		if(hasClouds){
@@ -94,7 +97,7 @@ public class Planet implements Disposable, RenderObject{
 				shader.setUniformf("u_color", cloudColor);
 			});
 			
-			clouds = PlanetCreator.genRenderable(PlanetCreator.modelBuilder.createSphere(cloudSize, cloudSize, cloudSize, 
+			clouds = MeshCreator.genRenderable(MeshCreator.modelBuilder.createSphere(cloudSize, cloudSize, cloudSize, 
 					cloudDivis, cloudDivis, new Material(), Usage.Position));
 		}
 		

@@ -1,4 +1,4 @@
-package io.anuke.procgdx.generators.planets;
+package io.anuke.procgdx.generators.planets.types;
 
 import com.badlogic.gdx.graphics.Color;
 
