@@ -204,7 +204,7 @@ public abstract class StaticPlanet implements RenderableProvider{
 				Vector3 sp = Tmp.v31.set(curr1.position).add(width*2f);
 				
 				float sHeight = getHeight(sp);
-				Color sColor = getColor(curr1.position, sHeight + (getModHeight(sp) - 0.5f) / 9f);
+				Color sColor = getColor(curr1.position, sHeight + (getModHeight(sp) - 0.5f) / 8f);
 				
 				curr1.position.scl(1f + sHeight*intensity);
 				
