@@ -53,6 +53,7 @@ public abstract class StaticPlanet implements RenderableProvider{
 	}
 	
 	public abstract float getHeight(Vector3 position);
+	public abstract float getModHeight(Vector3 position);
 	public abstract Color getColor(Vector3 position, float height);
 	
 	void fixNormals(int[] indices, float[] vertices, int indiceAmount, int verticeAmount){
@@ -160,7 +161,6 @@ public abstract class StaticPlanet implements RenderableProvider{
 		
 		builder.begin(Usage.Position | Usage.Normal | Usage.ColorPacked, GL20.GL_TRIANGLES);
 		
-		final Matrix4 transform = matTmp1.idt();
 		final float angleUFrom = 0, angleUTo = 360f, angleVFrom = 0f, angleVTo = 180f;
 		final float hw = width * 0.5f;
 		final float hh = height * 0.5f;
@@ -183,9 +183,11 @@ public abstract class StaticPlanet implements RenderableProvider{
 		tmpIndices.ensureCapacity(divisionsU * 2);
 		tmpIndices.size = s;
 		int tempOffset = 0;
+		
+		long noiseTime = 0;
 
 		builder.ensureVertices((divisionsV + 1) * (divisionsU + 1));
-		builder.ensureRectangleIndices(divisionsU);
+		builder.ensureRectangleIndices(divisionsU*divisionsV);
 		for(int iv = 0; iv <= divisionsV; iv++){
 			angleV = avo + stepV * iv;
 			v = vs * iv;
@@ -194,32 +196,39 @@ public abstract class StaticPlanet implements RenderableProvider{
 			for(int iu = 0; iu <= divisionsU; iu++){
 				angleU = auo + stepU * iu;
 				u = 1f - us * iu;
-				curr1.position.set(MathUtils.cos(angleU) * hw * t, h, MathUtils.sin(angleU) * hd * t).mul(transform);
+				curr1.position.set(MathUtils.cos(angleU) * hw * t, h, MathUtils.sin(angleU) * hd * t);
 				curr1.normal.set(curr1.position).nor();
 				curr1.uv.set(u, v);
+				
 				
 				Vector3 sp = Tmp.v31.set(curr1.position).add(width*2f);
 				
 				float sHeight = getHeight(sp);
-				Color sColor = getColor(curr1.position, sHeight);
+				Color sColor = getColor(curr1.position, sHeight + (getModHeight(sp) - 0.5f) / 9f);
 				
 				curr1.position.scl(1f + sHeight*intensity);
 				
 				curr1.setCol(sColor);
 				
 				tmpIndices.set(tempOffset, builder.vertex(curr1));
+				
 				final int o = tempOffset + s;
-				if((iv > 0) && (iu > 0)) // FIXME don't duplicate lines and points
+				
+				long time = TimeUtils.millis();
+				if((iv > 0) && (iu > 0)){ // FIXME don't duplicate lines and points
 					builder.rect(tmpIndices.get(tempOffset), 
 							tmpIndices.get((o - 1) % s), 
 							tmpIndices.get((o - (divisionsU + 2)) % s), 
 							tmpIndices.get((o - (divisionsU + 1)) % s));
+				}
+				noiseTime += TimeUtils.timeSinceMillis(time);
+				
 				tempOffset = (tempOffset + 1) % tmpIndices.size;
 			}
 		}
 		
 		BuildResult result = builder.end();
-		UCore.log("Done building raw vertices: " + Timers.elapsed() + "ms.");
+		UCore.log("Done building raw vertices: " + Timers.elapsed() + "ms, of which noise was " + noiseTime + "ms.");
 		
 		Timers.mark();
 		fixTriangles(result.vertices, result.indices);

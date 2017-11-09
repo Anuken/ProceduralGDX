@@ -604,13 +604,15 @@ public class MultiMeshBuilder{
 	}
 
 	public void index(int value1, int value2, int value3, int value4, int value5, int value6){
-		ensureIndices(6);
-		indices.add(value1);
-		indices.add(value2);
-		indices.add(value3);
-		indices.add(value4);
-		indices.add(value5);
-		indices.add(value6);
+		//ensureIndices(6);
+		int i = indices.size;
+		indices.items[i+0] = (value1);
+		indices.items[i+1] = (value2);
+		indices.items[i+2] = (value3);
+		indices.items[i+3] = (value4);
+		indices.items[i+4] = (value5);
+		indices.items[i+5] = (value6);
+		indices.size += 6;
 	}
 
 	public void index(int value1, int value2, int value3, int value4, int value5, int value6, int value7, int value8){
