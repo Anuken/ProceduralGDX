@@ -25,6 +25,8 @@ public abstract class StaticPlanet implements RenderableProvider{
 	private static final MultiMeshBuilder builder = new MultiMeshBuilder();
 	private static final ModelBuilder modelBuilder = new ModelBuilder();
 	
+	static boolean flat = false;
+	
 	public int seed = Mathf.random(99999);
 	public Simplex noise = new Simplex();
 	float intensity = 0.5f;
@@ -90,12 +92,13 @@ public abstract class StaticPlanet implements RenderableProvider{
 			vertices[c + 5] = Tmp.v31.y;
 			vertices[c + 6] = Tmp.v31.z;
 			
-			/*
-			float color = vertices[a + 3];
-			
-			vertices[a + 3] = color;
-			vertices[b + 3] = color;
-			vertices[c + 3] = color; */
+			if(flat){
+				float color = (vertices[a + 3]);
+				
+				vertices[a + 3] = color;
+				vertices[b + 3] = color;
+				vertices[c + 3] = color;
+			}
 		}
 	}
 	

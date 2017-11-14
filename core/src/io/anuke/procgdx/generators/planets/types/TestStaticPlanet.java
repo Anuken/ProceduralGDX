@@ -6,12 +6,11 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector3;
 
 import io.anuke.procgdx.generators.planets.StaticPlanet;
-import io.anuke.ucore.UCore;
 import io.anuke.ucore.graphics.Hue;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Tmp;
 
-public class TestStatic extends StaticPlanet{
+public class TestStaticPlanet extends StaticPlanet{
 	static Pixmap pix = new Pixmap(Gdx.files.internal("sprites/colors.png"));;
 	static int waterLevel = 5;
 	static float water = waterLevel / (float)(pix.getHeight());
@@ -30,9 +29,8 @@ public class TestStatic extends StaticPlanet{
 		Hue.rgb(255, 255, 255)  //snow
 	};
 
-	public TestStatic() {
-		super(9f, 1000, 0.2f);
-		UCore.log("water: " + water);
+	public TestStaticPlanet() {
+		super(11f, 1000, 0.3f);
 	}
 
 	@Override
