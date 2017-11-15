@@ -30,12 +30,12 @@ public class TestStaticPlanet extends StaticPlanet{
 	};
 
 	public TestStaticPlanet() {
-		super(11f, 1000, 0.3f);
+		super(11f, 1200, 0.3f);
 	}
 
 	@Override
 	public float getHeight(Vector3 position){
-		float height = Mathf.pow((float)noise.octaveNoise3D(7, 0.48f, 1f/3f, position.x, position.y, position.z), 2f);
+		float height = Mathf.pow((float)noise.octaveNoise3D(7, 0.48f, 1f/3f, position.x, position.y, position.z), 2.4f);
 		if(height <= water){
 			return water;
 		}
@@ -53,9 +53,15 @@ public class TestStaticPlanet extends StaticPlanet{
 
 	@Override
 	public Color getColor(Vector3 position, float height){
-		float temp = (float)noise.octaveNoise3D(7, 0.48f, 1f/4f, position.x, position.y + 999f, position.z);
+		float rad = 11f;
+		float temp = Mathf.clamp(Math.abs(position.y * 2f) / (rad));
+		float tnoise = (float)noise.octaveNoise3D(7, 0.48f, 1f/3f, position.x, position.y + 999f, position.z);
+		temp = Mathf.lerp(temp, tnoise, 0.5f);
+		height *= 1.2f;
+		height = Mathf.clamp(height);
 		
-		return Tmp.c1.set(pix.getPixel((int)(temp * (pix.getWidth()-1)), (int)((1f-height) * (pix.getHeight()-1))));//colors[(int)(height * colors.length)];
+		return Tmp.c1.set(pix.getPixel((int)(temp * (pix.getWidth()-1)), 
+				(int)((1f-height) * (pix.getHeight()-1))));//colors[(int)(height * colors.length)];
 	}
 
 }

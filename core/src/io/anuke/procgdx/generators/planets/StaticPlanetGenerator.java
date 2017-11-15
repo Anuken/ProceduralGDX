@@ -32,7 +32,7 @@ public class StaticPlanetGenerator implements Generator{
 	ImmediateModeRenderer20 rend = new ImmediateModeRenderer20(false, true, 0);
 
 	PostProcessor post;
-	boolean postProcess = true;
+	boolean postProcess = false;
 	boolean testShapes = false;
 
 	Array<RenderableProvider> renderables = new Array<>();
