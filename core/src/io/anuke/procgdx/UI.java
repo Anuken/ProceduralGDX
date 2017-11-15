@@ -22,8 +22,10 @@ import io.anuke.ucore.scene.ui.TextButton;
 import io.anuke.ucore.scene.ui.layout.Table;
 
 public class UI extends SceneModule{
-	Generator[] generators = {new StaticPlanetGenerator(), new ShaderPlanetGenerator(), new Terrain(), new VoxelClouds(), 
+	Generator[] generators = {new CanyonGenerator(),
+			new StaticPlanetGenerator(), new ShaderPlanetGenerator(), new Terrain(), new VoxelClouds(), 
 			new VoxelTerrain(), new HeightmapTerrain(), new RGBNoise()};
+	
 	Generator current = generators[0];
 	Table genTable;
 	GifRecorder recorder = new GifRecorder(new SpriteBatch());

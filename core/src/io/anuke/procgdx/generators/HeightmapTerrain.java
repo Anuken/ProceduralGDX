@@ -56,11 +56,11 @@ public class HeightmapTerrain extends ModelGenerator{
 		
 		for(int x = 0; x < size; x ++){
 			for(int z = 0; z < size; z ++){
-				float elev = (float)Math.pow((1+sim.octaveNoise2d(eloct, elpers, 1f/elscale, x, z))/2f, 1.3f);
-				float temp = (float)(1+sim.octaveNoise2d(tempoct, temppers, 1f/tempscale, x + 40, z + 40))/2f;
+				float elev = (float)Math.pow((1+sim.octaveNoise2D(eloct, elpers, 1f/elscale, x, z))/2f, 1.3f);
+				float temp = (float)(1+sim.octaveNoise2D(tempoct, temppers, 1f/tempscale, x + 40, z + 40))/2f;
 				
 				float elevOffset = elev*0.5f 
-						+ (float)(1+sim.octaveNoise2d(eloct+2, elpers+0.01f, 1f/(elscale+15f), x, z))/4f;
+						+ (float)(1+sim.octaveNoise2D(eloct+2, elpers+0.01f, 1f/(elscale+15f), x, z))/4f;
 				
 				if(island){
 					elev = elev * Mathf.clamp(1f - (Vector2.dst(size/2, size/2, x, z) / (size/2)), 0, 0.999f);

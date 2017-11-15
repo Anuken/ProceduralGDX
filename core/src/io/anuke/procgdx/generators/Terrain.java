@@ -36,11 +36,11 @@ public class Terrain extends ImageGenerator{
 		sim.setSeed(seed);
 		
 		forEach((x, y)->{
-			float elev = (float)(1+sim.octaveNoise2d(eloct, elpers, 1f/elscale, x, y))/2f;
-			float temp = (float)(1+sim.octaveNoise2d(tempoct, temppers, 1f/tempscale, x + 40, y + 40))/2f;
+			float elev = (float)(1+sim.octaveNoise2D(eloct, elpers, 1f/elscale, x, y))/2f;
+			float temp = (float)(1+sim.octaveNoise2D(tempoct, temppers, 1f/tempscale, x + 40, y + 40))/2f;
 			
 			float elevOffset = elev*0.5f 
-					+ (float)(1+sim.octaveNoise2d(eloct+2, elpers+0.01f, 1f/(elscale+15f), x, y))/4f;
+					+ (float)(1+sim.octaveNoise2D(eloct+2, elpers+0.01f, 1f/(elscale+15f), x, y))/4f;
 			
 			if(island){
 				elev = elev * Mathf.clamp(1f - (Vector2.dst(size/2, size/2, x, y) / (size/2)), 0, 0.999f);
