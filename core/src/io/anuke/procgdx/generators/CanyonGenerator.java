@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import io.anuke.ucore.graphics.Hue;
+import io.anuke.ucore.noise.Simplex;
 import io.anuke.ucore.util.Angles;
 import io.anuke.ucore.util.Mathf;
 import io.anuke.ucore.util.Tmp;
@@ -51,8 +52,11 @@ public class CanyonGenerator extends BasicNoise{
 
 	@Override
 	public void generate(){
+		//pass this otherwise
+		Simplex terrainsim = new Simplex();
 
 		forEach((x, y) -> {
+			double terrainnoise = terrainsim.octaveNoise2D(octaves, falloff, 1 / scale / ((float) size / 400f), x, y) * nscl;
 			double noise = sim.octaveNoise2D(octaves, falloff, 1 / scale / ((float) size / 400f), x, y) * nscl;
 
 			double min = 1f;
@@ -63,8 +67,10 @@ public class CanyonGenerator extends BasicNoise{
 						/ radius + noise*s1) * Mathf.lerp((float) noise, 1f, s2);
 				min = Math.min(dst, min);
 			}
+			
+			double finalvalue = (terrainnoise + min*1.5)/2;
 
-			Color dst = Hue.lightness((float) min);
+			Color dst = Hue.lightness((float) finalvalue);
 
 			pixmap.setColor(dst);
 			pixmap.drawPixel(x, y);
