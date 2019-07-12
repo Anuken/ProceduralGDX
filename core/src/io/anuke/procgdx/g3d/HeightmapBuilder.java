@@ -32,6 +32,19 @@ public class HeightmapBuilder{
 	}
 	
 	public static Model createHeightmapModel(float[][] heights, int[][] colors, float heightscale, float yoffset){
+		Mesh[] meshes = createHeightmapMesh(heights, colors, heightscale, yoffset);
+		
+		modelBuilder.begin();
+		int i = 0;
+
+		for(Mesh mesh : meshes){
+			modelBuilder.part("mesh" + i ++, mesh, GL20.GL_TRIANGLES, new Material());
+		}
+
+		return modelBuilder.end();
+	}
+	
+	private static Mesh[] createHeightmapMesh(float[][] heights, int[][] colors, float heightscale, float yoffset){
 		begin();
 		
 		float offsetx = -heights.length/2f;
@@ -56,16 +69,7 @@ public class HeightmapBuilder{
 				rect(vectors[0], vectors[1], vectors[2], vectors[3]);
 			}
 		}
-		Mesh[] meshes = end();
-		
-		modelBuilder.begin();
-		int i = 0;
-
-		for(Mesh mesh : meshes){
-			modelBuilder.part("mesh" + i ++, mesh, GL20.GL_TRIANGLES, new Material());
-		}
-
-		return modelBuilder.end();
+		return end();
 	}
 
 	private static void begin(){

@@ -135,11 +135,9 @@ public class StaticPlanetGenerator implements Generator{
 
 			Gdx.graphics.requestRendering();
 			Core.batch.end();
-			if(postProcess)
-				post.capture();
+			if(postProcess) post.capture();
 			update();
-			if(postProcess)
-				post.render();
+			if(postProcess) post.render();
 			Core.batch.begin();
 		}).grow();
 	}

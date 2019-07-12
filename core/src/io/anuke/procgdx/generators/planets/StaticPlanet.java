@@ -21,15 +21,14 @@ import io.anuke.ucore.util.Tmp;
 public abstract class StaticPlanet implements RenderableProvider{
 	private static final IntArray tmpIndices = new IntArray();
 	private static final VertexInfo vertTmp3 = new VertexInfo();
-	private static final Matrix4 matTmp1 = new Matrix4();
 	private static final MultiMeshBuilder builder = new MultiMeshBuilder();
 	private static final ModelBuilder modelBuilder = new ModelBuilder();
 	
-	static boolean flat = false;
+	static boolean flat = true, lines = false;
 	
 	public int seed = Mathf.random(99999);
 	public Simplex noise = new Simplex();
-	float intensity = 0.5f;
+	float intensity;
 	
 	Model model;
 	ModelInstance instance;
@@ -42,7 +41,7 @@ public abstract class StaticPlanet implements RenderableProvider{
 		
 		modelBuilder.begin();
 		for(int i = 0; i < meshes.size; i ++){
-			modelBuilder.part("mesh"+i, meshes.get(i), GL20.GL_TRIANGLES, new Material());
+			modelBuilder.part("mesh"+i, meshes.get(i), lines ? GL20.GL_LINES : GL20.GL_TRIANGLES, new Material());
 		}
 		model = modelBuilder.end();
 	

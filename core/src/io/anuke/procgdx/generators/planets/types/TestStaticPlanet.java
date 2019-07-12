@@ -30,7 +30,7 @@ public class TestStaticPlanet extends StaticPlanet{
 	};
 
 	public TestStaticPlanet() {
-		super(11f, 1200, 0.3f);
+		super(11f, 500, 0.3f);
 	}
 
 	@Override
